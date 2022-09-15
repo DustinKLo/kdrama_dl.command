@@ -90,7 +90,7 @@ fi
 # URL escape resolution param so that we can use values like "720p+"
 # python is available by default on MacOS - comment out if
 # using urlencoded params
-resolution=$(python -c "import urllib; print(urllib.quote('''$resolution'''))")
+resolution=$(python3 -c "import urllib.parse; print(urllib.parse.quote('''$resolution'''))")
 
 echo -e "Choose a ${C_OKBLUE}File Format${C_END} (enter the option number)":
 select ext in 'mkv' 'mp4'; do
