@@ -87,10 +87,20 @@ if [ -z $resolution ]; then
     exit 1
 fi
 
+# checking for version of python, macOS 12.3+ python2 is removed in favor of python3
+python_version=$(python -c "import sys; print(sys.version_info.major)" 2>/dev/null)
+if [ $? -ne 0 ]; then
+  python_version="3"
+fi
+
 # URL escape resolution param so that we can use values like "720p+"
 # python is available by default on MacOS - comment out if
 # using urlencoded params
-resolution=$(python3 -c "import urllib.parse; print(urllib.parse.quote('''$resolution'''))")
+if [ $python_version="3"  ]; then
+  resolution=$(python3 -c "import urllib.parse; print(urllib.parse.quote('''$resolution'''))")
+else
+  resolution=$(python -c "import urllib; print(urllib.quote('''$resolution'''))")
+fi
 
 echo -e "Choose a ${C_OKBLUE}File Format${C_END} (enter the option number)":
 select ext in 'mkv' 'mp4'; do
